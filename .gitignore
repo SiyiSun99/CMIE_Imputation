@@ -1,0 +1,17 @@
+# Ignore all .csv files
+*.csv
+
+# Ignore all .xlsx files
+*.xlsx
+
+# Ignore all .pdf files
+*.pdf
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore Jupyter Notebook files
+*.ipynb
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
