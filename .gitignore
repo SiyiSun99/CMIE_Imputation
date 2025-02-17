@@ -4,8 +4,11 @@
 # Ignore all .xlsx files
 *.xlsx
 
-# Ignore all .pdf files
+# Ignore all other not related files
 *.pdf
+*.pptx
+*.json
+*.docx
 
 # Ignore macOS system files
 .DS_Store
