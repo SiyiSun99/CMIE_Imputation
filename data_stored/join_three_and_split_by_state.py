@@ -5,6 +5,8 @@
 @Author      :   siyi.sun
 @Time        :   2025/02/02 12:14:12
 """
+
+# export PATH="/home/siyi.sun/miniconda3/bin:$PATH"
 import pandas as pd
 
 def combine_dataframes(c19_df, income_df):

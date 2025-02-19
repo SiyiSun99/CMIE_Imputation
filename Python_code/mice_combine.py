@@ -1,7 +1,17 @@
+#!/home/siyi.sun/miniconda3/bin python3
+# -*- coding: UTF-8 -*-
+"""
+@Description :   combine the data from mice imputation
+@Author      :   siyi.sun
+@Time        :   2025/02/18 22:49:25
+"""
+# export PATH="/home/siyi.sun/miniconda3/bin:$PATH"
+
 import pandas as pd
 import numpy as np
 from pathlib import Path
 from collections import Counter
+from tqdm import tqdm
 import gc
 
 def combine_mice_imputations(cohort, miss_method, miss_ratio, index_file, n_imputations=5):
@@ -69,19 +79,18 @@ def combine_mice_imputations(cohort, miss_method, miss_ratio, index_file, n_impu
     return combined_df
 
 cohorts = ["C19"]
-miss_ratios = [10, 20, 30, 40, 50]
-miss_methods = ["MAR"]
-n_imputations = 5
+miss_ratios = [10,20,30,40,50]
+miss_methods = ["MNAR"]
+Sampletime = 5
 for cohort in cohorts:
     for miss_method in miss_methods:
-        for miss_ratio in miss_ratios:  
-            for index_file in range(n_imputations):
+        for miss_ratio in tqdm(miss_ratios):  
+            for index_file in tqdm(range(Sampletime)):
                 combined_df = combine_mice_imputations(
                     cohort=cohort,
                     miss_method=miss_method,
                     miss_ratio=miss_ratio,
-                    index_file=index_file,
-                    n_imputations=n_imputations
+                    index_file=index_file
                 )
                     
 gc.collect()
