@@ -22,6 +22,30 @@ Our goal is to:
 | **ML-Based** | MissForest, k-NN |
 | **Deep Learning** | GAIN (GAN-based), MIDAS/VAE (Autoencoders), DSAN (Attention-based) |
 
+## Environment
+
+To set up a dedicated environment for this project, follow these steps:
+
+1. **Create a new conda environment (Python 3.7):**
+   ```bash
+   conda create -n tf115_env python=3.7
+   ```
+
+2. **Activate the environment:**
+   ```bash
+   conda activate tf115_env
+   ```
+   
+3. **Install the required packages:**
+   ```bash
+   conda install tensorflow==1.15.0
+   conda install tensorflow-probability==0.8.0
+   conda install numpy
+   conda install pandas
+   conda install matplotlib
+   conda install scikit-learn
+   ```
+
 ## 📈 Evaluation Metrics
 - **Imputation Performance**: RMSE (continuous variables) & accuracy (categorical variables).
 - **Downstream Task Impact**: Effect on predictive models (poverty classification, health trends).

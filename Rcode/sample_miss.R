@@ -16,13 +16,13 @@ dir.create(missingDataPath, showWarnings = FALSE)
 dir.create(sampleDataPath, showWarnings = FALSE)
 
 # List of cohorts
-cohorts <- c("C18")
+cohorts <- c("C19")
 
 # Missing data configuration
 missingMechanism <- c("MCAR","MAR","MNAR")
 missList <- c(10, 20, 30, 40, 50)
-trainingSampleTime <- 10  # Number of samples for training
-testSampleTime <- 2      # Number of samples for testing
+trainingSampleTime <- 5  # Number of samples for training
+testSampleTime <- 1      # Number of samples for testing
 
 # Function to process categorical variables
 process_categorical_vars <- function(df) {
@@ -41,57 +41,6 @@ process_categorical_vars <- function(df) {
   
   return(df)
 }
-
-# # Function to create missing data and samples
-# process_csv <- function(input_path, output_base_path_miss, output_base_path_sample) {
-#   # Read the CSV file
-#   full_df <- read.csv(input_path)
-#   
-#   # Process categorical variables
-#   full_df <- process_categorical_vars(full_df)
-#   
-#   # Process for both missing data and samples
-#   for (output_type in c("miss", "sample")) {
-#     current_path <- if(output_type == "miss") output_base_path_miss else output_base_path_sample
-#     current_samples <- if(output_type == "miss") trainingSampleTime else testSampleTime
-#     
-#     # Create base output directory if it doesn't exist
-#     if (!dir.exists(current_path)) {
-#       dir.create(current_path, recursive = TRUE)
-#     }
-#     
-#     # Generate missing data for each mechanism
-#     for (method in missingMechanism) {
-#       method_path <- file.path(current_path, method)
-#       if (!dir.exists(method_path)) {
-#         dir.create(method_path)
-#       }
-#       
-#       # Generate for each missing percentage
-#       for (miss_rate in missList) {
-#         miss_path <- file.path(method_path, paste0("miss", miss_rate))
-#         if (!dir.exists(miss_path)) {
-#           dir.create(miss_path)
-#         }
-#         
-#         # Generate multiple samples
-#         mclapply(1:current_samples, function(i) {
-#           file_name <- paste0(i-1, ".csv")
-#           file_path <- file.path(miss_path, file_name)
-#           
-#           # Generate missing data
-#           miss_df <- produce_NA(full_df, 
-#                                 mechanism = method, 
-#                                 perc.missing = miss_rate/100)
-#           Miss_df <- as.data.frame(miss_df$data.incomp)
-#           
-#           # Save the result
-#           write.csv(Miss_df, file_path, row.names = FALSE)
-#         }, mc.cores = min(current_samples, detectCores()))
-#       }
-#     }
-#   }
-# }
 
 process_csv <- function(input_path, output_base_path_miss, output_base_path_sample) {
   # Read the CSV file
