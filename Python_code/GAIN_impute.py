@@ -43,6 +43,13 @@ class experiments:
     def run_model(self):
         print("Start running the model on sample...")
         epoch_dict = self.run_sampletest()
+        print(epoch_dict)
+        try:
+            pd.DataFrame(epoch_dict).to_csv(
+                "/home/siyi.sun/CMIE_Project/epoch_dict.csv"
+            )
+        except Exception as e:
+            print(f"Warning: {e}")  # Log the error
         print("Start running the model on main datasets...")
         self.run_experiment(epoch_dict=epoch_dict)
 

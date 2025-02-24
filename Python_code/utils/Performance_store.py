@@ -53,7 +53,7 @@ class Performance_store:
             # Handle categorical values
             dictionary = self.label_reverse[index][1][1]
             # Convert one-hot encoded values back to categories
-            indices = np.where(values == np.amax(values, axis=1, keepdims=True))[1]
+            indices = np.argmax(values, axis=1)
             return [dictionary[idx] for idx in indices]
 
     def create_imputed_dataframe(self, data):
