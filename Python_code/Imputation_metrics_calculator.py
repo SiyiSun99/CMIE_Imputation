@@ -12,13 +12,13 @@ from pathlib import Path
 import glob
 
 
-def min_max_normalize(data, min_val, max_val):
+def z_score_normalize(data, mean, std):
     """
-    Apply min-max normalization using pre-computed min and max values
+    Apply z-score normalization using pre-computed mean and standard deviation
     """
-    if max_val == min_val:
+    if std == 0:
         return np.zeros_like(data)
-    return (data - min_val) / (max_val - min_val)
+    return (data - mean) / std
 
 
 def calculate_imputation_metrics(base_path):
@@ -36,7 +36,7 @@ def calculate_imputation_metrics(base_path):
     missing_methods = ["MCAR", "MAR", "MNAR"]
     missing_ratios = [10, 20, 30, 40, 50]
     sample_time = 5
-    impute_methods = ["gain"]
+    impute_methods = ["mice"]
 
     results = []
 
@@ -49,6 +49,10 @@ def calculate_imputation_metrics(base_path):
             # Get continuous and categorical columns
             cont_cols = [col for col in full_data.columns if col.startswith("con_")]
             cat_cols = [col for col in full_data.columns if col.startswith("cat_")]
+
+            # Calculate mean and standard deviation for each continuous column in full dataset
+            cont_means = {col: full_data[col].mean() for col in cont_cols}
+            cont_stds = {col: full_data[col].std() for col in cont_cols}
 
             for miss_method in missing_methods:
                 for miss_ratio in missing_ratios:
@@ -82,10 +86,20 @@ def calculate_imputation_metrics(base_path):
                                 n_missing = missing_idx.sum()
 
                                 if n_missing > 0:
-                                    # Calculate squared errors for missing values
+                                    # Normalize both full and imputed data using full data's min-max
+                                    full_normalized = z_score_normalize(
+                                        full_data.loc[missing_idx, col],
+                                        cont_means[col],
+                                        cont_stds[col],
+                                    )
+                                    imputed_normalized = z_score_normalize(
+                                        imputed_data.loc[missing_idx, col],
+                                        cont_means[col],
+                                        cont_stds[col],
+                                    )
+                                    # Calculate squared errors using normalized values
                                     squared_errors = (
-                                        full_data.loc[missing_idx, col]
-                                        - imputed_data.loc[missing_idx, col]
+                                        full_normalized - imputed_normalized
                                     ) ** 2
                                     cont_rmse += squared_errors.sum()
                                     total_missing += n_missing
@@ -144,7 +158,7 @@ def calculate_imputation_metrics(base_path):
 
 
 # Example usage:
-base_path = Path("/Users/siysun/Desktop/CMIE/CMIE_Project/data_stored")
+base_path = Path("/home/siyi.sun/CMIE_Project/data_stored")
 results = calculate_imputation_metrics(base_path)
-output_path = "/Users/siysun/Desktop/CMIE/CMIE_Project/imputation_metrics_results.csv"
+output_path = "/home/siyi.sun/CMIE_Project/imputation_metrics_results.csv"
 results.to_csv(output_path, index=False)
